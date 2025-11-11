@@ -29,7 +29,7 @@ export class AppwriteService {
 				}
 			);
 		} catch (error) {
-			console.log('appWriteService createpost', error);
+			console.log('appwriteService createpost', error);
 		}
 	}
 
@@ -47,7 +47,7 @@ export class AppwriteService {
 				}
 			);
 		} catch (error) {
-			console.log('appWriteService updatepost :: ', error);
+			console.log('appwriteService updatepost :: ', error);
 		}
 	}
 
@@ -60,7 +60,7 @@ export class AppwriteService {
 			);
 			return true;
 		} catch (error) {
-			console.log('appWriteService deletepost ::', error);
+			console.log('appwriteService deletepost ::', error);
 			return false;
 		}
 	}
@@ -86,7 +86,7 @@ export class AppwriteService {
 				[Query.equal('status', ['active'])]
 			);
 		} catch (error) {
-			console.log('appWriteService getAllPosts', error);
+			console.log('appwriteService getAllPosts', error);
 			return false;
 		}
 	}
@@ -126,6 +126,6 @@ export class AppwriteService {
 	}
 }
 
-const appWriteService = new AppwriteService();
+const appwriteService = new AppwriteService();
 
-export default appWriteService;
+export default appwriteService;
