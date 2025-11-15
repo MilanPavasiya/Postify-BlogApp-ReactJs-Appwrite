@@ -52,7 +52,7 @@ function Login() {
 				{error && <p className='text-red-600 mt-8 text-center'>{error}</p>}
 				<form onSubmit={handleSubmit(onSubmit)} className='mt-8'>
 					<Input
-						label='Email'
+						label='Email: '
 						type='email'
 						placeholder='Enter your email'
 						{...register('email', {
@@ -65,12 +65,14 @@ function Login() {
 						})}
 					/>
 					<Input
-						label='Password'
+						label='Password: '
 						type='password'
 						placeholder='Enter your password'
 						{...register('password', { required: true, minLength: 6 })}
 					/>
-					<Button type='submit' className='w-full mt-6'></Button>
+					<Button type='submit' className='w-full mt-6'>
+						Sign in
+					</Button>
 				</form>
 			</div>
 		</div>
