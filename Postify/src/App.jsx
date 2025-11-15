@@ -1,13 +1,43 @@
 import './App.css';
-import config from './config/config';
+import { useDispatch } from 'react-redux';
+import authService from './appwrite/auth';
+import { useEffect, useState } from 'react';
+import { login, logout } from './store/authSlice';
+import { Header } from './components/index';
+import { Footer } from './components/index';
+import { Outlet } from 'react-router-dom';
 
 function App() {
-	console.log(config.appwrite.url);
-	return (
-		<>
-			<h1>App component</h1>
-		</>
-	);
+	const [loading, setLoading] = useState(true);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		authService
+			.getCurrentUser()
+			.then((userData) => {
+				if (userData) {
+					dispatch(login({ userData }));
+				} else {
+					dispatch(logout());
+				}
+			})
+			.catch((e) => {
+				console.log('App.js useEffect for authService', e);
+			})
+			.finally(() => setLoading(false));
+	}, []);
+
+	return !loading ? (
+		<div className='min-h-screen flex flex-wrap content-between bg-gray-400'>
+			<div className='w-full block'>
+				<Header />
+				<main>
+					Posts: <Outlet />
+				</main>
+				<Footer />
+			</div>
+		</div>
+	) : null;
 }
 
 export default App;
