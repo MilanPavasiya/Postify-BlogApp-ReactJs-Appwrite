@@ -63,12 +63,12 @@ function PostForm({ post }) {
 	};
 
 	const slugTransform = useCallback((slugValue) => {
-		if (slugValue && slugValue === 'string') {
+		if (slugValue && typeof slugValue === 'string') {
 			return slugValue
 				.trim()
 				.toLowerCase()
 				.replace(/[^a-zA-Z\d\s]+/g, '-')
-				.replace(/\s/g, '-');
+				.replace(/\s+/g, '-');
 		}
 		return '';
 	}, []);
