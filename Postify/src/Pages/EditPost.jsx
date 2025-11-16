@@ -4,13 +4,13 @@ import appwriteService from '../appwrite/configuration';
 import { useNavigate, useParams } from 'react-router-dom';
 
 function EditPost() {
-	const [post, setPost] = useState([]);
+	const [post, setPost] = useState(null);
 	const { slug } = useParams();
 	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (slug) {
-			appwriteService.getPost().then((post) => {
+			appwriteService.getPost(slug).then((post) => {
 				if (post) {
 					setPost(post);
 				}
