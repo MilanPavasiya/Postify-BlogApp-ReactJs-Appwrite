@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Container, PostCard } from '../components/index';
 import appwriteService from '../appwrite/configuration';
+import { useNavigate } from 'react-router-dom';
 
 function AllPosts() {
 	const [posts, setPosts] = useState([]);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		appwriteService.getAllPosts([]).then((posts) => {
-			if (posts) {
+			if (posts.length > 0) {
 				setPosts(posts.documents);
+			} else {
+				navigate('/');
 			}
 		});
 	}, []);
