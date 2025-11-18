@@ -8,14 +8,23 @@ function AllPosts() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		appwriteService.getAllPosts([]).then((posts) => {
-			if (posts.length > 0) {
-				setPosts(posts.documents);
-			} else {
+		const fetchPosts = async () => {
+			try {
+				const result = await appwriteService.getAllPosts();
+
+				if (result?.documents?.length > 0) {
+					setPosts(result.documents);
+				} else {
+					navigate('/');
+				}
+			} catch (error) {
+				console.error('Error fetching posts:', error);
 				navigate('/');
 			}
-		});
-	}, []);
+		};
+
+		fetchPosts();
+	}, [navigate]);
 
 	return (
 		<div className='w-full py-8'>
