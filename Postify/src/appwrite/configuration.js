@@ -1,17 +1,15 @@
 import config from '../config/config.js';
-import { Client, ID, Databases, Storage, Query } from 'appwrite';
+import { Client, Databases, Query } from 'appwrite';
 
 export class AppwriteService {
 	client = new Client();
 	databases;
-	bucket;
 
 	constructor() {
 		this.client
 			.setEndpoint(config.appwrite.url)
 			.setProject(config.appwrite.projectId);
 		this.databases = new Databases(this.client);
-		this.bucket = new Storage(this.client);
 	}
 
 	async createPost({ title, slug, content, featuredImage, status, userId }) {
@@ -91,7 +89,7 @@ export class AppwriteService {
 		}
 	}
 
-	// File upload services
+	// appwrite File upload services
 
 	async uploadFile(file) {
 		try {
