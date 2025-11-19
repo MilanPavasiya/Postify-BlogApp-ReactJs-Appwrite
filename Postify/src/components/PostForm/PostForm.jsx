@@ -112,6 +112,7 @@ function PostForm({ post }) {
 							label='URL'
 							placeholder='Post URL (auto-generated)'
 							className='mb-2'
+							readOnly
 							{...register('slug', { required: 'URL is required' })}
 							onInput={(e) => {
 								setValue('slug', slugTransform(e.currentTarget.value), {
