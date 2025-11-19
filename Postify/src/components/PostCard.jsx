@@ -1,19 +1,22 @@
 import React from 'react';
-import appwriteService from '../appwrite/configuration';
 import { Link } from 'react-router-dom';
 
 function PostCard({ $id, title, featuredImage }) {
 	return (
-		<Link to={`/post/${$id}`}>
-			<div className='w-full bg-gray-100 rounded-xl p-4'>
-				<div className='w-full justify-center mb-4'>
+		<Link to={`/post/${$id}`} className='block group'>
+			<div className='w-full bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 transition-all duration-300 hover:shadow-lg hover:border-gray-300'>
+				<div className='w-full aspect-video overflow-hidden bg-gray-100'>
 					<img
-						src={appwriteService.getFilePreview(featuredImage)}
+						src={featuredImage}
 						alt={title}
-						className='rounded-xl'
+						className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-105'
 					/>
 				</div>
-				<h2 className='text-xl font-bold'>{title}</h2>
+				<div className='p-6'>
+					<h2 className='text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors duration-200'>
+						{title}
+					</h2>
+				</div>
 			</div>
 		</Link>
 	);

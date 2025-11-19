@@ -27,13 +27,17 @@ function AllPosts() {
 	}, [navigate]);
 
 	return (
-		<div className='w-full py-8'>
+		<div className='w-full py-12 md:py-16'>
 			<Container>
-				<div className='flex flex-wrap'>
+				<div className='mb-8'>
+					<h1 className='text-3xl md:text-4xl font-bold text-gray-900 mb-2'>
+						All Posts
+					</h1>
+					<p className='text-gray-600'>Browse all posts from our community</p>
+				</div>
+				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
 					{posts.map((post) => (
-						<div key={post.$id} className='p-2 w-1/4'>
-							<PostCard {...post} />
-						</div>
+						<PostCard key={post.$id} {...post} />
 					))}
 				</div>
 			</Container>

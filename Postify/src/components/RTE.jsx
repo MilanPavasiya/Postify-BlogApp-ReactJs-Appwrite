@@ -4,10 +4,14 @@ import { Controller } from 'react-hook-form';
 
 function RTE({ name, control, label, defaultValue = '' }) {
 	return (
-		<>
-			<div className='w-full'>
-				{label && <label className='inline-block mb-1 pl-1'>{label}</label>}
+		<div className='w-full'>
+			{label && (
+				<label className='inline-block mb-2 text-sm font-medium text-gray-700'>
+					{label}
+				</label>
+			)}
 
+			<div className='border border-gray-300 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all duration-200'>
 				<Controller
 					name={name || 'content'}
 					control={control}
@@ -44,14 +48,14 @@ function RTE({ name, control, label, defaultValue = '' }) {
 								toolbar:
 									'undo redo | blocks | image | bold italic forecolor | alignleft aligncenter bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |removeformat | help',
 								content_style:
-									'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+									'body { font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#374151; }',
 							}}
 							onEditorChange={onChange}
 						/>
 					)}
 				/>
 			</div>
-		</>
+		</div>
 	);
 }
 

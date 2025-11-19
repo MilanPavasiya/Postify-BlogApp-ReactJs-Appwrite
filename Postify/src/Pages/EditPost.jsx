@@ -21,9 +21,17 @@ function EditPost() {
 	}, [slug, navigate]);
 
 	return post ? (
-		<div className='py-8'>
+		<div className='py-8 md:py-12'>
 			<Container>
-				<PostForm post={post} />
+				<div className='max-w-7xl mx-auto'>
+					<header className='mb-8'>
+						<h1 className='text-3xl md:text-4xl font-bold text-gray-900 mb-2'>
+							Edit Post
+						</h1>
+						<p className='text-gray-600'>Update your post content and settings</p>
+					</header>
+					<PostForm post={post} />
+				</div>
 			</Container>
 		</div>
 	) : null;
