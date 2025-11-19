@@ -4,6 +4,7 @@ import { Button, Input, RTE, Select } from '../index';
 import appwriteService from '../../appwrite/configuration.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { uploadToS3 } from '../../utils/uploadToS3.js';
 
 function PostForm({ post }) {
 	const { register, handleSubmit, watch, setValue, control, getValues } =
@@ -21,49 +22,44 @@ function PostForm({ post }) {
 	const userId = userData.$id;
 
 	const onSubmit = async (data) => {
-		if (post) {
-			console.log(data.image[0], 'PostForm onSubmit update');
-			console.log(data);
-			const file = data.image[0]
-				? await appwriteService.uploadFile(data.image[0], userId)
-				: null;
+		let imageUrl = null;
 
-			if (file) {
-				try {
-					await appwriteService.deleteFile(post.featuredImage);
-				} catch (error) {
-					console.log(
-						'Error while updating post and deleting post image',
-						error
-					);
-				}
+		// Upload to S3 only if there is a new image file
+		if (data.image && data.image[0]) {
+			imageUrl = await uploadToS3(data.image[0]);
+
+			// If upload failed and this is a new post
+			if (!imageUrl && !post) {
+				alert('Failed to upload image. Please try again.');
+				return;
 			}
+		}
 
-			const updatePost = await appwriteService.updatePost(post.$id, {
+		if (post) {
+			// For updates, use new image URL if available, otherwise keep existing
+			const updatedPost = await appwriteService.updatePost(post.$id, {
 				...data,
-				featuredImage: file ? file.$id : undefined,
+				featuredImage: imageUrl || post.featuredImage || '',
 			});
 
-			if (updatePost) {
-				navigate(`/post/${updatePost.$id}`);
+			if (updatedPost) {
+				navigate(`/post/${updatedPost.$id}`);
 			}
 		} else {
-			console.log(data.image[0]);
+			// For new posts, require an image
+			if (!imageUrl) {
+				alert('Please upload a featured image.');
+				return;
+			}
 
-			const file = await appwriteService.uploadFile(data.image[0], userId);
+			const createdPost = await appwriteService.createPost({
+				...data,
+				featuredImage: imageUrl,
+				userId,
+			});
 
-			if (file) {
-				data.featuredImage = file.$id;
-				console.log(file.$id, 'fileID');
-
-				const createPost = await appwriteService.createPost({
-					...data,
-					userId,
-				});
-
-				if (createPost) {
-					navigate(`/post/${createPost.$id}`);
-				}
+			if (createdPost) {
+				navigate(`/post/${createdPost.$id}`);
 			}
 		}
 	};
@@ -89,63 +85,89 @@ function PostForm({ post }) {
 	}, [watch, slugTransform, setValue]);
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className='flex flex-wrap'>
-			<div className='w-2/3 px-2'>
-				<Input
-					label='Title :'
-					placeholder='Title'
-					className='mb-4'
-					{...register('title', { required: true })}
-				/>
+		<form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
+				{/* Main Content */}
+				<div className='lg:col-span-2 space-y-6'>
+					<Input
+						label='Title'
+						placeholder='Enter post title'
+						className='mb-6'
+						{...register('title', { required: true })}
+					/>
 
-				<Input
-					label='Slug :'
-					placeholder='Slug'
-					className='mb-4'
-					{...register('slug', { required: true })}
-					onInput={(e) => {
-						setValue('slug', slugTransform(e.currentTarget.value), {
-							shouldValidate: true,
-						});
-					}}
-				/>
-				<RTE
-					label='Content :'
-					name='content'
-					control={control}
-					defaultValues={getValues('content')}
-				/>
-			</div>
-			<div className='w-1/3 px-2'>
-				<Input
-					label='Featured Image :'
-					type='file'
-					className='mb-4'
-					accept='image/png, image/jpg, image/jpeg, image/gif'
-					{...register('image', { required: !post })}
-				/>
-				{post && (
-					<div className='w-full mb-4'>
-						<img
-							src={appwriteService.getFilePreview(post.featuredImage)}
-							alt={post.title}
-							className='rounded-lg'
+					<Input
+						label='Slug'
+						placeholder='Post slug (auto-generated)'
+						className='mb-6'
+						{...register('slug', { required: true })}
+						onInput={(e) => {
+							setValue('slug', slugTransform(e.currentTarget.value), {
+								shouldValidate: true,
+							});
+						}}
+					/>
+
+					<div>
+						<RTE
+							label='Content'
+							name='content'
+							control={control}
+							defaultValues={getValues('content')}
 						/>
 					</div>
-				)}
+				</div>
 
-				<Select
-					options={['active', 'inactive']}
-					label='Status'
-					className='mb-4'
-					{...register('status', { required: true })}
-				/>
-				<Button
-					type='submit'
-					bgColor={post ? 'bg-green-500' : undefined}
-					className='w-full'>
-					{post ? 'Update' : 'Submit'}
-				</Button>
+				<div className='lg:col-span-1 space-y-6'>
+					<div className='bg-gray-50 rounded-xl p-6 border border-gray-200'>
+						<h3 className='text-lg font-semibold text-gray-900 mb-6'>
+							Post Settings
+						</h3>
+
+						<div className='mb-6'>
+							<Input
+								label='Featured Image'
+								type='file'
+								accept='image/png, image/jpg, image/jpeg, image/gif'
+								{...register('image', { required: !post })}
+							/>
+						</div>
+
+						{post && post.featuredImage && (
+							<div className='w-full mb-6'>
+								<label className='block mb-2 text-sm font-medium text-gray-700'>
+									Current Image
+								</label>
+								<div className='rounded-lg overflow-hidden border border-gray-200'>
+									<img
+										src={post.featuredImage}
+										alt={post.title}
+										className='w-full h-auto object-cover'
+									/>
+								</div>
+							</div>
+						)}
+
+						<div className='mb-6'>
+							<Select
+								options={['active', 'inactive']}
+								label='Status'
+								{...register('status', { required: true })}
+							/>
+						</div>
+
+						<Button
+							type='submit'
+							bgColor={
+								post
+									? 'bg-green-600 hover:bg-green-700'
+									: 'bg-blue-600 hover:bg-blue-700'
+							}
+							className='w-full'>
+							{post ? 'Update Post' : 'Publish Post'}
+						</Button>
+					</div>
+				</div>
 			</div>
 		</form>
 	);
