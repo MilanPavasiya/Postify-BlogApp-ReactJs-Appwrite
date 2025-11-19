@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, RTE, Select } from '../index';
-import appwriteService from '../../appwrite/configuration';
+import appwriteService from '../../appwrite/configuration.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -18,11 +18,14 @@ function PostForm({ post }) {
 
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
+	const userId = userData.$id;
 
 	const onSubmit = async (data) => {
 		if (post) {
+			console.log(data.image[0], 'PostForm onSubmit update');
+			console.log(data);
 			const file = data.image[0]
-				? await appwriteService.uploadFile(data.image[0])
+				? await appwriteService.uploadFile(data.image[0], userId)
 				: null;
 
 			if (file) {
@@ -45,14 +48,17 @@ function PostForm({ post }) {
 				navigate(`/post/${updatePost.$id}`);
 			}
 		} else {
-			const file = await appwriteService.uploadFile(data.image[0]);
+			console.log(data.image[0]);
+
+			const file = await appwriteService.uploadFile(data.image[0], userId);
 
 			if (file) {
 				data.featuredImage = file.$id;
+				console.log(file.$id, 'fileID');
 
 				const createPost = await appwriteService.createPost({
 					...data,
-					userId: userData.$id,
+					userId,
 				});
 
 				if (createPost) {
@@ -62,14 +68,14 @@ function PostForm({ post }) {
 		}
 	};
 
-	const slugTransform = useCallback((slugValue) => {
-		if (slugValue && typeof slugValue === 'string') {
-			return slugValue
+	const slugTransform = useCallback((value) => {
+		if (value && typeof value === 'string')
+			return value
 				.trim()
 				.toLowerCase()
 				.replace(/[^a-zA-Z\d\s]+/g, '-')
-				.replace(/\s+/g, '-');
-		}
+				.replace(/\s/g, '-');
+
 		return '';
 	}, []);
 
@@ -115,6 +121,7 @@ function PostForm({ post }) {
 					label='Featured Image :'
 					type='file'
 					className='mb-4'
+					accept='image/png, image/jpg, image/jpeg, image/gif'
 					{...register('image', { required: !post })}
 				/>
 				{post && (
