@@ -7,15 +7,22 @@ import { useSelector } from 'react-redux';
 import { uploadToS3 } from '../../utils/uploadToS3.js';
 
 function PostForm({ post }) {
-	const { register, handleSubmit, watch, setValue, control, getValues } =
-		useForm({
-			defaultValues: {
-				title: post?.title || '',
-				slug: post?.$id || '',
-				content: post?.content || '',
-				status: post?.status || 'active',
-			},
-		});
+	const {
+		register,
+		handleSubmit,
+		watch,
+		setValue,
+		control,
+		getValues,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
+			title: post?.title || '',
+			slug: post?.$id || '',
+			content: post?.content || '',
+			status: post?.status || 'active',
+		},
+	});
 
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
@@ -87,26 +94,35 @@ function PostForm({ post }) {
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-				{/* Main Content */}
 				<div className='lg:col-span-2 space-y-6'>
-					<Input
-						label='Title'
-						placeholder='Enter post title'
-						className='mb-6'
-						{...register('title', { required: true })}
-					/>
+					<div>
+						<Input
+							label='Title'
+							placeholder='Enter post title'
+							className='mb-2'
+							{...register('title', { required: 'Title is required' })}
+						/>
+						{errors?.title && (
+							<p className='text-red-600 text-sm'>{errors.title.message}</p>
+						)}
+					</div>
 
-					<Input
-						label='Slug'
-						placeholder='Post slug (auto-generated)'
-						className='mb-6'
-						{...register('slug', { required: true })}
-						onInput={(e) => {
-							setValue('slug', slugTransform(e.currentTarget.value), {
-								shouldValidate: true,
-							});
-						}}
-					/>
+					<div>
+						<Input
+							label='URL'
+							placeholder='Post URL (auto-generated)'
+							className='mb-2'
+							{...register('slug', { required: 'URL is required' })}
+							onInput={(e) => {
+								setValue('slug', slugTransform(e.currentTarget.value), {
+									shouldValidate: true,
+								});
+							}}
+						/>
+						{errors?.slug && (
+							<p className='text-red-600 text-sm'>{errors.slug.message}</p>
+						)}
+					</div>
 
 					<div>
 						<RTE
@@ -114,7 +130,11 @@ function PostForm({ post }) {
 							name='content'
 							control={control}
 							defaultValues={getValues('content')}
+							rules={{ required: 'Content is required' }}
 						/>
+						{errors?.content && (
+							<p className='text-red-600 text-sm'>{errors.content.message}</p>
+						)}
 					</div>
 				</div>
 
@@ -124,13 +144,18 @@ function PostForm({ post }) {
 							Post Settings
 						</h3>
 
-						<div className='mb-6'>
+						<div className='mb-4'>
 							<Input
-								label='Featured Image'
+								label='Upload Image'
 								type='file'
 								accept='image/png, image/jpg, image/jpeg, image/gif'
-								{...register('image', { required: !post })}
+								{...register('image', {
+									required: !post ? 'Image is required' : false,
+								})}
 							/>
+							{errors?.image && (
+								<p className='text-red-600 text-sm'>{errors.image.message}</p>
+							)}
 						</div>
 
 						{post && post.featuredImage && (
@@ -148,12 +173,15 @@ function PostForm({ post }) {
 							</div>
 						)}
 
-						<div className='mb-6'>
+						<div className='mb-4'>
 							<Select
 								options={['active', 'inactive']}
 								label='Status'
-								{...register('status', { required: true })}
+								{...register('status', { required: 'Status is required' })}
 							/>
+							{errors?.status && (
+								<p className='text-red-600 text-sm'>{errors.status.message}</p>
+							)}
 						</div>
 
 						<Button
