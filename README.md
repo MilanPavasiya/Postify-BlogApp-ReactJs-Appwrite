@@ -1,2 +1,3 @@
-# MegaBlog-ReactJs-Appwrite
+Postify-Blogging-App
+
 I will update soon!
