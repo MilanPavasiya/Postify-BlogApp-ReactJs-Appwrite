@@ -12,6 +12,7 @@ function PostForm({ post }) {
 		handleSubmit,
 		watch,
 		setValue,
+		reset,
 		control,
 		getValues,
 		formState: { errors },
@@ -26,16 +27,53 @@ function PostForm({ post }) {
 
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
-	const userId = userData.$id;
+
+	// Transform title to slug
+	const slugTransform = useCallback((value) => {
+		if (value && typeof value === 'string')
+			return value
+				.trim()
+				.toLowerCase()
+				.replace(/[^a-zA-Z\d\s]+/g, '-')
+				.replace(/\s/g, '-');
+		return '';
+	}, []);
+
+	// Reset form values when userData or post changes
+	useEffect(() => {
+		if (userData) {
+			reset({
+				title: post?.title || '',
+				slug: slugTransform(post?.title || ''),
+				content: post?.content || '',
+				status: post?.status || 'active',
+			});
+			setValue('image', null); // clear previous image for new user
+		}
+	}, [userData, post, reset, slugTransform, setValue]);
+
+	// Update slug dynamically as title changes
+	useEffect(() => {
+		const subscription = watch((value, { name }) => {
+			if (name === 'title') {
+				setValue('slug', slugTransform(value.title), { shouldValidate: true });
+			}
+		});
+		return () => subscription.unsubscribe();
+	}, [watch, slugTransform, setValue]);
 
 	const onSubmit = async (data) => {
+		if (!userData) {
+			alert('User data not loaded yet. Please wait.');
+			return;
+		}
+
 		let imageUrl = null;
 
-		// Upload to S3 only if there is a new image file
+		// Upload image to S3 if provided
 		if (data.image && data.image[0]) {
 			imageUrl = await uploadToS3(data.image[0]);
 
-			// If upload failed and this is a new post
 			if (!imageUrl && !post) {
 				alert('Failed to upload image. Please try again.');
 				return;
@@ -43,17 +81,16 @@ function PostForm({ post }) {
 		}
 
 		if (post) {
-			// For updates, use new image URL if available, otherwise keep existing
+			// Update existing post
 			const updatedPost = await appwriteService.updatePost(post.$id, {
 				...data,
 				featuredImage: imageUrl || post.featuredImage || '',
 			});
-
-			if (updatedPost) {
-				navigate(`/post/${updatedPost.$id}`);
-			}
+			if (updatedPost) navigate(`/post/${updatedPost.$id}`);
 		} else {
-			// For new posts, require an image
+			// Create new post
+			const userId = userData.$id;
+
 			if (!imageUrl) {
 				alert('Please upload a featured image.');
 				return;
@@ -64,32 +101,12 @@ function PostForm({ post }) {
 				featuredImage: imageUrl,
 				userId,
 			});
-
-			if (createdPost) {
-				navigate(`/post/${createdPost.$id}`);
-			}
+			if (createdPost) navigate(`/post/${createdPost.$id}`);
 		}
 	};
 
-	const slugTransform = useCallback((value) => {
-		if (value && typeof value === 'string')
-			return value
-				.trim()
-				.toLowerCase()
-				.replace(/[^a-zA-Z\d\s]+/g, '-')
-				.replace(/\s/g, '-');
-
-		return '';
-	}, []);
-
-	useEffect(() => {
-		const subscription = watch((value, { name }) => {
-			if (name === 'title') {
-				setValue('slug', slugTransform(value.title), { shouldValidate: true });
-			}
-		});
-		return () => subscription.unsubscribe();
-	}, [watch, slugTransform, setValue]);
+	// Block render until userData is loaded
+	if (!userData) return <p>Loading user data...</p>;
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
