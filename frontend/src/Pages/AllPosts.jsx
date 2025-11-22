@@ -48,17 +48,24 @@ function AllPosts() {
 	}
 
 	return (
-		<div className='w-full py-12 md:py-16'>
+		<div className='w-full py-12 md:py-16 bg-gradient-to-br from-purple-50 via-white to-blue-50'>
 			<Container>
-				<div className='mb-8'>
-					<h1 className='text-3xl md:text-4xl font-bold text-gray-900 mb-2'>
+				<div className='mb-12 text-center animate-fade-in'>
+					<h1 className='text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-pink-600 bg-clip-text text-transparent mb-4 animate-slide-up'>
 						All Posts
 					</h1>
-					<p className='text-gray-600'>Browse all posts from our community</p>
+					<p className='text-xl text-gray-600 animate-fade-in-up' style={{ animationDelay: '0.2s' }}>
+						Browse all your posts
+					</p>
 				</div>
 				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
-					{posts.map((post) => (
-						<PostCard key={post.$id} {...post} />
+					{posts.map((post, index) => (
+						<div
+							key={post.$id}
+							className='animate-fade-in-up'
+							style={{ animationDelay: `${index * 0.1}s` }}>
+							<PostCard {...post} />
+						</div>
 					))}
 				</div>
 			</Container>
