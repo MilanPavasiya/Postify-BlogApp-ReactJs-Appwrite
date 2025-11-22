@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 
 function AllPosts() {
 	const [posts, setPosts] = useState([]);
+	const [loading, setLoading] = useState(true);
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
 
@@ -22,16 +23,29 @@ function AllPosts() {
 				if (result?.documents?.length > 0) {
 					setPosts(result.documents);
 				} else {
-					setPosts([]);
+					navigate('/');
+					return;
 				}
 			} catch (error) {
 				console.error('Error fetching posts:', error);
-				setPosts([]);
+				navigate('/');
+				return;
+			} finally {
+				setLoading(false);
 			}
 		};
 
 		fetchPosts();
 	}, [navigate, userData]);
+
+	if (loading) {
+		return (
+			<div className='w-full py-20 text-center'>
+				<div className='inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600'></div>
+				<p className='mt-4 text-gray-600'>Loading posts...</p>
+			</div>
+		);
+	}
 
 	return (
 		<div className='w-full py-12 md:py-16'>
