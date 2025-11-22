@@ -1,18 +1,21 @@
 import config from '../config/config.js';
-import { Client, Databases, Query, ID } from 'appwrite';
+import { Client, Databases, Query, ID, Storage } from 'appwrite';
+import { validateImage } from '../utils/validateImage.js';
 
 export class AppwriteService {
 	client = new Client();
 	databases;
+	bucket;
 
 	constructor() {
 		this.client
 			.setEndpoint(config.appwrite.url)
 			.setProject(config.appwrite.projectId);
 		this.databases = new Databases(this.client);
+		this.bucket = new Storage(this.client);
 	}
 
-	async createPost({ title, slug, content, featuredImage, status, userId }) {
+	async createPost({ title, content, featuredImage, status, userId }) {
 		try {
 			return await this.databases.createDocument(
 				config.appwrite.databaseId,
@@ -27,48 +30,46 @@ export class AppwriteService {
 				}
 			);
 		} catch (error) {
-			console.log('appwriteService createpost', error);
+			console.error('appwriteService createPost error:', error);
 			throw error;
 		}
 	}
 
-	async updatePost(postId, { title, slug, content, featuredImage, status }, userId = null) {
+	async updatePost(postId, { title, content, featuredImage, status }, userId = null) {
 		try {
-			// If userId is provided, verify ownership before updating
 			if (userId) {
 				const post = await this.getPost(postId, userId);
 				if (!post) {
 					throw new Error('Post not found or you do not have permission to update it');
 				}
 			}
-			const updateData = {
-				title,
-				content,
-				featuredImage,
-				status,
-			};
-			// Note: slug is not stored in Appwrite - it's only for UI display
+
 			return await this.databases.updateDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
 				postId,
-				updateData
+				{
+					title,
+					content,
+					featuredImage,
+					status,
+				}
 			);
 		} catch (error) {
-			console.log('appwriteService updatepost :: ', error);
+			console.error('appwriteService updatePost error:', error);
 			throw error;
 		}
 	}
 
 	async deletePost(postId, userId = null) {
 		try {
-			// If userId is provided, verify ownership before deleting
 			if (userId) {
 				const post = await this.getPost(postId, userId);
 				if (!post) {
 					throw new Error('Post not found or you do not have permission to delete it');
 				}
 			}
+
 			await this.databases.deleteDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
@@ -76,27 +77,26 @@ export class AppwriteService {
 			);
 			return true;
 		} catch (error) {
-			console.log('appwriteService deletepost ::', error);
+			console.error('appwriteService deletePost error:', error);
 			return false;
 		}
 	}
 
 	async getPost(postId, userId = null) {
 		try {
-			// Get post by document ID (which is what we use for routing)
 			const post = await this.databases.getDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
 				postId
 			);
-			
-			// If userId is provided, verify ownership
+
 			if (userId && post && post.userId !== userId) {
 				return false;
 			}
+
 			return post || false;
 		} catch (error) {
-			console.log('appwrite getPost :: ', error);
+			console.error('appwriteService getPost error:', error);
 			return false;
 		}
 	}
@@ -107,29 +107,35 @@ export class AppwriteService {
 			if (userId) {
 				queries.push(Query.equal('userId', [userId]));
 			}
+
 			return await this.databases.listDocuments(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
 				queries
 			);
 		} catch (error) {
-			console.log('appwriteService getAllPosts', error);
+			console.error('appwriteService getAllPosts error:', error);
 			return false;
 		}
 	}
 
-	// appwrite File upload services
+	// Appwrite File upload services
 
 	async uploadFile(file) {
 		try {
+			const validation = validateImage(file);
+			if (!validation.isValid) {
+				throw new Error(validation.error);
+			}
+
 			return await this.bucket.createFile(
 				config.appwrite.bucketId,
 				ID.unique(),
 				file
 			);
 		} catch (error) {
-			console.log('appwriteservice uploadfile', error);
-			return false;
+			console.error('appwriteService uploadFile error:', error);
+			throw error;
 		}
 	}
 
@@ -138,7 +144,7 @@ export class AppwriteService {
 			await this.bucket.deleteFile(config.appwrite.bucketId, fileId);
 			return true;
 		} catch (error) {
-			console.log('appwriteservice deletefile', error);
+			console.error('appwriteService deleteFile error:', error);
 			return false;
 		}
 	}
@@ -147,7 +153,7 @@ export class AppwriteService {
 		try {
 			return this.bucket.getFilePreview(config.appwrite.bucketId, fileId);
 		} catch (error) {
-			console.log('appwriteservice getFilePreview', error);
+			console.error('appwriteService getFilePreview error:', error);
 			return false;
 		}
 	}

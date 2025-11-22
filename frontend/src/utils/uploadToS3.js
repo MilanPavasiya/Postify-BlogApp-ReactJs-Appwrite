@@ -1,7 +1,14 @@
+import { validateImage } from './validateImage.js';
+
 export const uploadToS3 = async (file) => {
 	try {
-		const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+		const validation = validateImage(file);
+		if (!validation.isValid) {
+			console.error(validation.error);
+			return null;
+		}
 
+		const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 		if (!apiBaseUrl || apiBaseUrl === 'undefined') {
 			console.error('VITE_API_BASE_URL is not defined.');
 			return null;

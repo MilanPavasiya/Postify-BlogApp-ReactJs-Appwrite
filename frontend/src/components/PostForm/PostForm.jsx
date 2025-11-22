@@ -5,6 +5,7 @@ import appwriteService from '../../appwrite/configuration.js';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { uploadToS3 } from '../../utils/uploadToS3.js';
+import { validateImage } from '../../utils/validateImage.js';
 
 function PostForm({ post }) {
 	const {
@@ -70,7 +71,7 @@ function PostForm({ post }) {
 
 		let imageUrl = null;
 
-		// Upload image to S3 if provided
+		// Upload image to S3 if provided (validation already handled by form validation)
 		if (data.image && data.image[0]) {
 			imageUrl = await uploadToS3(data.image[0]);
 
@@ -86,7 +87,6 @@ function PostForm({ post }) {
 				post.$id,
 				{
 					title: data.title,
-					slug: data.slug, // slug is not saved to Appwrite, only used for UI
 					content: data.content,
 					featuredImage: imageUrl || post.featuredImage || '',
 					status: data.status,
@@ -96,8 +96,6 @@ function PostForm({ post }) {
 			if (updatedPost) navigate(`/post/${updatedPost.$id}`);
 		} else {
 			// Create new post
-			const userId = userData.$id;
-
 			if (!imageUrl) {
 				alert('Please upload a featured image.');
 				return;
@@ -105,11 +103,10 @@ function PostForm({ post }) {
 
 			const createdPost = await appwriteService.createPost({
 				title: data.title,
-				slug: data.slug, // slug is not saved to Appwrite, only used for UI
 				content: data.content,
 				featuredImage: imageUrl,
 				status: data.status,
-				userId,
+				userId: userData.$id,
 			});
 			if (createdPost) navigate(`/post/${createdPost.$id}`);
 		}
@@ -188,10 +185,21 @@ function PostForm({ post }) {
 								accept='image/png, image/jpg, image/jpeg, image/gif'
 								{...register('image', {
 									required: !post ? 'Image is required' : false,
+									validate: (files) => {
+										if (!files || files.length === 0) {
+											return !post ? 'Image is required' : true;
+										}
+										const file = files[0];
+										const validation = validateImage(file);
+										return validation.isValid || validation.error;
+									},
 								})}
 							/>
+							<p className='text-xs text-gray-500 mt-1'>
+								Max file size: 1MB. Allowed formats: PNG, JPG, JPEG, GIF
+							</p>
 							{errors?.image && (
-								<p className='text-red-600 text-sm'>{errors.image.message}</p>
+								<p className='text-red-600 text-sm mt-1'>{errors.image.message}</p>
 							)}
 						</div>
 
