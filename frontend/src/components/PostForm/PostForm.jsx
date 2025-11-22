@@ -44,7 +44,7 @@ function PostForm({ post }) {
 		if (userData) {
 			reset({
 				title: post?.title || '',
-				slug: slugTransform(post?.title || ''),
+				slug: post?.$id || slugTransform(post?.title || ''),
 				content: post?.content || '',
 				status: post?.status || 'active',
 			});
@@ -82,10 +82,17 @@ function PostForm({ post }) {
 
 		if (post) {
 			// Update existing post
-			const updatedPost = await appwriteService.updatePost(post.$id, {
-				...data,
-				featuredImage: imageUrl || post.featuredImage || '',
-			});
+			const updatedPost = await appwriteService.updatePost(
+				post.$id,
+				{
+					title: data.title,
+					slug: data.slug, // slug is not saved to Appwrite, only used for UI
+					content: data.content,
+					featuredImage: imageUrl || post.featuredImage || '',
+					status: data.status,
+				},
+				userData.$id
+			);
 			if (updatedPost) navigate(`/post/${updatedPost.$id}`);
 		} else {
 			// Create new post
@@ -97,8 +104,11 @@ function PostForm({ post }) {
 			}
 
 			const createdPost = await appwriteService.createPost({
-				...data,
+				title: data.title,
+				slug: data.slug, // slug is not saved to Appwrite, only used for UI
+				content: data.content,
 				featuredImage: imageUrl,
+				status: data.status,
 				userId,
 			});
 			if (createdPost) navigate(`/post/${createdPost.$id}`);
@@ -106,7 +116,16 @@ function PostForm({ post }) {
 	};
 
 	// Block render until userData is loaded
-	if (!userData) return <p>Loading user data...</p>;
+	if (!userData) {
+		return (
+			<div className='flex items-center justify-center py-12'>
+				<div className='text-center'>
+					<div className='inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4'></div>
+					<p className='text-gray-600'>Loading user data...</p>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>

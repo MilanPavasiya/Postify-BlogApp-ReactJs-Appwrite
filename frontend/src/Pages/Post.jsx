@@ -15,18 +15,29 @@ export default function Post() {
 	const isAuthor = post && userData ? post.userId === userData.$id : false;
 
 	useEffect(() => {
+		if (!userData) {
+			navigate('/login');
+			return;
+		}
+
 		if (slug) {
-			appwriteService.getPost(slug).then((post) => {
+			appwriteService.getPost(slug, userData.$id).then((post) => {
 				if (post) setPost(post);
 				else navigate('/');
 			});
 		} else navigate('/');
-	}, [slug, navigate]);
+	}, [slug, navigate, userData]);
 
 	const deletePost = () => {
-		appwriteService.deletePost(post.$id).then((status) => {
+		if (!userData) {
+			alert('You must be logged in to delete posts');
+			return;
+		}
+		appwriteService.deletePost(post.$id, userData.$id).then((status) => {
 			if (status) {
 				navigate('/');
+			} else {
+				alert('Failed to delete post. You may not have permission.');
 			}
 		});
 	};

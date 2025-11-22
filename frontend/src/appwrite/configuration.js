@@ -1,5 +1,5 @@
 import config from '../config/config.js';
-import { Client, Databases, Query } from 'appwrite';
+import { Client, Databases, Query, ID } from 'appwrite';
 
 export class AppwriteService {
 	client = new Client();
@@ -17,7 +17,7 @@ export class AppwriteService {
 			return await this.databases.createDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
-				slug,
+				ID.unique(),
 				{
 					title,
 					content,
@@ -28,33 +28,51 @@ export class AppwriteService {
 			);
 		} catch (error) {
 			console.log('appwriteService createpost', error);
+			throw error;
 		}
 	}
 
-	async updatePost(slug, { title, content, featuredImage, status }) {
+	async updatePost(postId, { title, slug, content, featuredImage, status }, userId = null) {
 		try {
+			// If userId is provided, verify ownership before updating
+			if (userId) {
+				const post = await this.getPost(postId, userId);
+				if (!post) {
+					throw new Error('Post not found or you do not have permission to update it');
+				}
+			}
+			const updateData = {
+				title,
+				content,
+				featuredImage,
+				status,
+			};
+			// Note: slug is not stored in Appwrite - it's only for UI display
 			return await this.databases.updateDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
-				slug,
-				{
-					title,
-					content,
-					featuredImage,
-					status,
-				}
+				postId,
+				updateData
 			);
 		} catch (error) {
 			console.log('appwriteService updatepost :: ', error);
+			throw error;
 		}
 	}
 
-	async deletePost(slug) {
+	async deletePost(postId, userId = null) {
 		try {
+			// If userId is provided, verify ownership before deleting
+			if (userId) {
+				const post = await this.getPost(postId, userId);
+				if (!post) {
+					throw new Error('Post not found or you do not have permission to delete it');
+				}
+			}
 			await this.databases.deleteDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
-				slug
+				postId
 			);
 			return true;
 		} catch (error) {
@@ -63,25 +81,36 @@ export class AppwriteService {
 		}
 	}
 
-	async getPost(slug) {
+	async getPost(postId, userId = null) {
 		try {
-			return await this.databases.getDocument(
+			// Get post by document ID (which is what we use for routing)
+			const post = await this.databases.getDocument(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
-				slug
+				postId
 			);
+			
+			// If userId is provided, verify ownership
+			if (userId && post && post.userId !== userId) {
+				return false;
+			}
+			return post || false;
 		} catch (error) {
 			console.log('appwrite getPost :: ', error);
 			return false;
 		}
 	}
 
-	async getAllPosts() {
+	async getAllPosts(userId) {
 		try {
+			const queries = [Query.equal('status', ['active'])];
+			if (userId) {
+				queries.push(Query.equal('userId', [userId]));
+			}
 			return await this.databases.listDocuments(
 				config.appwrite.databaseId,
 				config.appwrite.collectionId,
-				[Query.equal('status', ['active'])]
+				queries
 			);
 		} catch (error) {
 			console.log('appwriteService getAllPosts', error);

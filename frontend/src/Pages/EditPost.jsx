@@ -2,23 +2,32 @@ import React, { useEffect, useState } from 'react';
 import { Container, PostForm } from '../components/index';
 import appwriteService from '../appwrite/configuration';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function EditPost() {
 	const [post, setPost] = useState(null);
 	const { slug } = useParams();
 	const navigate = useNavigate();
+	const userData = useSelector((state) => state.auth.userData);
 
 	useEffect(() => {
+		if (!userData) {
+			navigate('/login');
+			return;
+		}
+
 		if (slug) {
-			appwriteService.getPost(slug).then((post) => {
+			appwriteService.getPost(slug, userData.$id).then((post) => {
 				if (post) {
 					setPost(post);
+				} else {
+					navigate('/');
 				}
 			});
 		} else {
 			navigate('/');
 		}
-	}, [slug, navigate]);
+	}, [slug, navigate, userData]);
 
 	return post ? (
 		<div className='py-8 md:py-12'>
@@ -30,7 +39,7 @@ function EditPost() {
 						</h1>
 						<p className='text-gray-600'>Update your post content and settings</p>
 					</header>
-					<PostForm post={post} />
+					<PostForm key={`${post.$id}-${userData?.$id || 'no-user'}`} post={post} />
 				</div>
 			</Container>
 		</div>

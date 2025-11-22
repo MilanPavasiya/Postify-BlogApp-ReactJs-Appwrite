@@ -1,7 +1,10 @@
 import React from 'react';
 import { Container, PostForm } from '../components/index';
+import { useSelector } from 'react-redux';
 
 function AddPost() {
+	const userData = useSelector((state) => state.auth.userData);
+	
 	return (
 		<div className='py-8 md:py-12'>
 			<Container>
@@ -12,7 +15,7 @@ function AddPost() {
 						</h1>
 						<p className='text-gray-600'>Share your thoughts and ideas with the community</p>
 					</header>
-					<PostForm />
+					<PostForm key={userData?.$id || 'no-user'} />
 				</div>
 			</Container>
 		</div>

@@ -2,29 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { Container, PostCard } from '../components/index';
 import appwriteService from '../appwrite/configuration';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function AllPosts() {
 	const [posts, setPosts] = useState([]);
 	const navigate = useNavigate();
+	const userData = useSelector((state) => state.auth.userData);
 
 	useEffect(() => {
+		if (!userData) {
+			navigate('/login');
+			return;
+		}
+
 		const fetchPosts = async () => {
 			try {
-				const result = await appwriteService.getAllPosts();
+				const result = await appwriteService.getAllPosts(userData.$id);
 
 				if (result?.documents?.length > 0) {
 					setPosts(result.documents);
 				} else {
-					navigate('/');
+					setPosts([]);
 				}
 			} catch (error) {
 				console.error('Error fetching posts:', error);
-				navigate('/');
+				setPosts([]);
 			}
 		};
 
 		fetchPosts();
-	}, [navigate]);
+	}, [navigate, userData]);
 
 	return (
 		<div className='w-full py-12 md:py-16'>

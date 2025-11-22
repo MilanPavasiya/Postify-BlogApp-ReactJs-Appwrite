@@ -9,21 +9,22 @@ function Home() {
 	const [loading, setLoading] = useState(true);
 
 	const authStatus = useSelector((state) => state.auth.status);
+	const userData = useSelector((state) => state.auth.userData);
 
 	useEffect(() => {
-		if (!authStatus) {
+		if (!authStatus || !userData) {
 			setLoading(false);
 			return;
 		}
 
 		const fetchPosts = async () => {
-			const response = await appwriteService.getAllPosts();
+			const response = await appwriteService.getAllPosts(userData.$id);
 			setPosts(response ? response.documents : []);
 			setLoading(false);
 		};
 
 		fetchPosts();
-	}, [authStatus]);
+	}, [authStatus, userData]);
 
 	// Loader
 	if (loading) {
