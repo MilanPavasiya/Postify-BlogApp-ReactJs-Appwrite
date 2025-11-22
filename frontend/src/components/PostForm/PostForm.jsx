@@ -48,6 +48,8 @@ function PostForm({ post }) {
 				slug: post?.$id || slugTransform(post?.title || ''),
 				content: post?.content || '',
 				status: post?.status || 'active',
+			}, {
+				keepDefaultValues: false,
 			});
 			setValue('image', null); // clear previous image for new user
 		}
@@ -163,7 +165,8 @@ function PostForm({ post }) {
 							label='Content'
 							name='content'
 							control={control}
-							defaultValues={getValues('content')}
+							defaultValue={post?.content || ''}
+							key={post?.$id || 'new-post'}
 							rules={{ required: 'Content is required' }}
 						/>
 						{errors?.content && (
@@ -199,7 +202,9 @@ function PostForm({ post }) {
 								Max file size: 1MB. Allowed formats: PNG, JPG, JPEG, GIF
 							</p>
 							{errors?.image && (
-								<p className='text-red-600 text-sm mt-1'>{errors.image.message}</p>
+								<p className='text-red-600 text-sm mt-1'>
+									{errors.image.message}
+								</p>
 							)}
 						</div>
 

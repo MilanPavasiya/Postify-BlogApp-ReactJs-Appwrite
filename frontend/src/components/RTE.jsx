@@ -2,7 +2,7 @@ import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Controller } from 'react-hook-form';
 
-function RTE({ name, control, label, defaultValue = '' }) {
+function RTE({ name, control, label, defaultValue = '', key }) {
 	return (
 		<div className='w-full'>
 			{label && (
@@ -15,44 +15,49 @@ function RTE({ name, control, label, defaultValue = '' }) {
 				<Controller
 					name={name || 'content'}
 					control={control}
-					render={({ field: { onChange } }) => (
-						<Editor
-							apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
-							initialValue={defaultValue}
-							init={{
-								initialValue: defaultValue,
-								height: 500,
-								menubar: true,
-								plugins: [
-									'image',
-									'advlist',
-									'autolink',
-									'lists',
-									'link',
-									'image',
-									'charmap',
-									'preview',
-									'anchor',
-									'searchreplace',
-									'visualblocks',
-									'code',
-									'fullscreen',
-									'insertdatetime',
-									'media',
-									'table',
-									'code',
-									'help',
-									'wordcount',
-									'anchor',
-								],
-								toolbar:
-									'undo redo | blocks | image | bold italic forecolor | alignleft aligncenter bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent |removeformat | help',
-								content_style:
-									'body { font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#374151; }',
-							}}
-							onEditorChange={onChange}
-						/>
-					)}
+					defaultValue={defaultValue}
+					render={({ field: { onChange, value } }) => {
+						// Use value from form state, fallback to empty string if undefined/null
+						const editorValue = value !== undefined && value !== null ? value : '';
+						
+						return (
+							<Editor
+								key={key || 'editor'}
+								apiKey={import.meta.env.VITE_TINYMCE_API_KEY}
+								value={editorValue}
+								init={{
+									height: 500,
+									menubar: true,
+									plugins: [
+										'image',
+										'advlist',
+										'autolink',
+										'lists',
+										'link',
+										'charmap',
+										'preview',
+										'anchor',
+										'searchreplace',
+										'visualblocks',
+										'code',
+										'fullscreen',
+										'insertdatetime',
+										'media',
+										'table',
+										'help',
+										'wordcount',
+									],
+									toolbar:
+										'undo redo | blocks | image | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+									content_style:
+										'body { font-family:Helvetica,Arial,sans-serif; font-size:16px; line-height:1.6; color:#374151; }',
+								}}
+								onEditorChange={(content) => {
+									onChange(content);
+								}}
+							/>
+						);
+					}}
 				/>
 			</div>
 		</div>
