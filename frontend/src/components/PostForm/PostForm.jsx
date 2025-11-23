@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, RTE, Select } from '../index';
 import appwriteService from '../../appwrite/configuration.js';
@@ -8,6 +8,7 @@ import { uploadToS3 } from '../../utils/uploadToS3.js';
 import { validateImage } from '../../utils/validateImage.js';
 
 function PostForm({ post }) {
+	const [isLoading, setIsLoading] = useState(false);
 	const {
 		register,
 		handleSubmit,
@@ -68,43 +69,53 @@ function PostForm({ post }) {
 			return;
 		}
 
-		let imageUrl = null;
+		setIsLoading(true);
 
-		if (data.image && data.image[0]) {
-			imageUrl = await uploadToS3(data.image[0]);
+		try {
+			let imageUrl = null;
 
-			if (!imageUrl && !post) {
-				alert('Failed to upload image. Please try again.');
-				return;
+			if (data.image && data.image[0]) {
+				imageUrl = await uploadToS3(data.image[0]);
+
+				if (!imageUrl && !post) {
+					alert('Failed to upload image. Please try again.');
+					setIsLoading(false);
+					return;
+				}
 			}
-		}
 
-		if (post) {
-			const updatedPost = await appwriteService.updatePost(
-				post.$id,
-				{
+			if (post) {
+				const updatedPost = await appwriteService.updatePost(
+					post.$id,
+					{
+						title: data.title,
+						content: data.content,
+						featuredImage: imageUrl || post.featuredImage || '',
+						status: data.status,
+					},
+					userData.$id
+				);
+				if (updatedPost) navigate(`/post/${updatedPost.$id}`);
+			} else {
+				if (!imageUrl) {
+					alert('Please upload a featured image.');
+					setIsLoading(false);
+					return;
+				}
+
+				const createdPost = await appwriteService.createPost({
 					title: data.title,
 					content: data.content,
-					featuredImage: imageUrl || post.featuredImage || '',
+					featuredImage: imageUrl,
 					status: data.status,
-				},
-				userData.$id
-			);
-			if (updatedPost) navigate(`/post/${updatedPost.$id}`);
-		} else {
-			if (!imageUrl) {
-				alert('Please upload a featured image.');
-				return;
+					userId: userData.$id,
+				});
+				if (createdPost) navigate(`/post/${createdPost.$id}`);
 			}
-
-			const createdPost = await appwriteService.createPost({
-				title: data.title,
-				content: data.content,
-				featuredImage: imageUrl,
-				status: data.status,
-				userId: userData.$id,
-			});
-			if (createdPost) navigate(`/post/${createdPost.$id}`);
+		} catch (error) {
+			console.error('Error submitting post:', error);
+			alert('An error occurred. Please try again.');
+			setIsLoading(false);
 		}
 	};
 
@@ -128,6 +139,7 @@ function PostForm({ post }) {
 							label='Title'
 							placeholder='Enter post title'
 							className='mb-2'
+							disabled={isLoading}
 							{...register('title', { required: 'Title is required' })}
 						/>
 						{errors?.title && (
@@ -141,11 +153,14 @@ function PostForm({ post }) {
 							placeholder='Post URL (auto-generated)'
 							className='mb-2'
 							readOnly
+							disabled={isLoading}
 							{...register('slug', { required: 'URL is required' })}
 							onInput={(e) => {
-								setValue('slug', slugTransform(e.currentTarget.value), {
-									shouldValidate: true,
-								});
+								if (!isLoading) {
+									setValue('slug', slugTransform(e.currentTarget.value), {
+										shouldValidate: true,
+									});
+								}
 							}}
 						/>
 						{errors?.slug && (
@@ -161,6 +176,7 @@ function PostForm({ post }) {
 							defaultValue={post?.content || ''}
 							key={post?.$id || 'new-post'}
 							rules={{ required: 'Content is required' }}
+							disabled={isLoading}
 						/>
 						{errors?.content && (
 							<p className='text-red-600 text-sm'>{errors.content.message}</p>
@@ -179,6 +195,7 @@ function PostForm({ post }) {
 								label='Upload Image'
 								type='file'
 								accept='image/png, image/jpg, image/jpeg, image/gif'
+								disabled={isLoading}
 								{...register('image', {
 									required: !post ? 'Image is required' : false,
 									validate: (files) => {
@@ -220,6 +237,7 @@ function PostForm({ post }) {
 							<Select
 								options={['active', 'inactive']}
 								label='Status'
+								disabled={isLoading}
 								{...register('status', { required: 'Status is required' })}
 							/>
 							{errors?.status && (
@@ -229,13 +247,37 @@ function PostForm({ post }) {
 
 						<Button
 							type='submit'
+							disabled={isLoading}
 							bgColor={
 								post
 									? 'bg-green-600 hover:bg-green-700'
 									: 'bg-blue-600 hover:bg-blue-700'
 							}
-							className='w-full text-sm sm:text-base'>
-							{post ? 'Update Post' : 'Publish Post'}
+							className='w-full text-sm sm:text-base flex items-center justify-center gap-2'>
+							{isLoading ? (
+								<>
+									<svg
+										className='animate-spin h-4 w-4 sm:h-5 sm:w-5'
+										xmlns='http://www.w3.org/2000/svg'
+										fill='none'
+										viewBox='0 0 24 24'>
+										<circle
+											className='opacity-25'
+											cx='12'
+											cy='12'
+											r='10'
+											stroke='currentColor'
+											strokeWidth='4'></circle>
+										<path
+											className='opacity-75'
+											fill='currentColor'
+											d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'></path>
+										</svg>
+										<span>{post ? 'Updating...' : 'Publishing...'}</span>
+									</>
+								) : (
+									<span>{post ? 'Update Post' : 'Publish Post'}</span>
+								)}
 						</Button>
 					</div>
 				</div>
