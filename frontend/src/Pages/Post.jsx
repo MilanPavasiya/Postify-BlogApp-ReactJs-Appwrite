@@ -46,6 +46,27 @@ export default function Post() {
 		<article className='py-6 sm:py-8 md:py-12'>
 			<Container>
 				<div className='max-w-4xl mx-auto px-4 sm:px-0'>
+					<div className='mb-4 sm:mb-6'>
+						<Button
+							onClick={() => navigate('/all-posts')}
+							bgColor='bg-gray-600 hover:bg-gray-700'
+							className='text-sm sm:text-base px-4 sm:px-6 py-2 sm:py-2.5 flex items-center gap-2'>
+							<svg
+								className='w-4 h-4 sm:w-5 sm:h-5'
+								fill='none'
+								stroke='currentColor'
+								viewBox='0 0 24 24'>
+								<path
+									strokeLinecap='round'
+									strokeLinejoin='round'
+									strokeWidth={2}
+									d='M10 19l-7-7m0 0l7-7m-7 7h18'
+								/>
+							</svg>
+							Go back to All Posts
+						</Button>
+					</div>
+
 					<div className='w-full mb-6 sm:mb-8 relative rounded-xl sm:rounded-2xl overflow-hidden bg-gray-100'>
 						<img
 							src={post.featuredImage}
