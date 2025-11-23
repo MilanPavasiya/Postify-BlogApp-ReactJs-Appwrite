@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Logo, LogoutBtn } from '../index';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function Header() {
 	const authStatus = useSelector((state) => state.auth.status);
 	const navigate = useNavigate();
+	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	const navItems = [
 		{
@@ -40,24 +41,30 @@ function Header() {
 		},
 	];
 
+	const handleNavClick = (slug) => {
+		navigate(slug);
+		setMobileMenuOpen(false);
+	};
+
 	return (
 		<header className='sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg'>
 			<Container>
-				<nav className='flex items-center justify-between py-4'>
+				<nav className='flex items-center justify-between py-3 md:py-4'>
 					<div className='flex items-center'>
 						<Link
 							to='/'
 							className='transition-all duration-300 hover:scale-105 transform inline-block'>
-							<Logo width='70px' />
+							<Logo width='60px' className='md:w-[70px]' />
 						</Link>
 					</div>
-					<ul className='flex items-center gap-2'>
+					{/* Desktop Navigation */}
+					<ul className='hidden md:flex items-center gap-2'>
 						{navItems.map((item) =>
 							item.active ? (
 								<li key={item.name}>
 									<button
 										onClick={() => navigate(item.slug)}
-										className='px-4 py-2 text-sm font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600 hover:scale-105 transform relative group'>
+										className='px-3 lg:px-4 py-2 text-xs lg:text-sm font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600 hover:scale-105 transform relative group'>
 										<span className='relative z-10'>{item.name}</span>
 										<span className='absolute inset-0 rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300'></span>
 									</button>
@@ -70,7 +77,61 @@ function Header() {
 							</li>
 						)}
 					</ul>
+
+					{/* Mobile Menu Button */}
+					<button
+						onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+						className='md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors'
+						aria-label='Toggle menu'>
+						{!mobileMenuOpen ? (
+							<svg
+								className='w-6 h-6'
+								fill='none'
+								strokeLinecap='round'
+								strokeLinejoin='round'
+								strokeWidth='2'
+								viewBox='0 0 24 24'
+								stroke='currentColor'>
+								<path d='M4 6h16M4 12h16M4 18h16'></path>
+							</svg>
+						) : (
+							<svg
+								className='w-6 h-6'
+								fill='none'
+								strokeLinecap='round'
+								strokeLinejoin='round'
+								strokeWidth='2'
+								viewBox='0 0 24 24'
+								stroke='currentColor'>
+								<path d='M6 18L18 6M6 6l12 12'></path>
+							</svg>
+						)}
+					</button>
 				</nav>
+
+				{/* Mobile Navigation Menu */}
+				{mobileMenuOpen && (
+					<div className='md:hidden border-t border-gray-200 py-4 animate-fade-in'>
+						<ul className='flex flex-col gap-2'>
+							{navItems.map((item) =>
+								item.active ? (
+									<li key={item.name}>
+										<button
+											onClick={() => handleNavClick(item.slug)}
+											className='w-full text-left px-4 py-3 text-base font-medium text-gray-700 rounded-lg transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600'>
+											{item.name}
+										</button>
+									</li>
+								) : null
+							)}
+							{authStatus && (
+								<li className='px-4 py-2'>
+									<LogoutBtn />
+								</li>
+							)}
+						</ul>
+					</div>
+				)}
 			</Container>
 		</header>
 	);
