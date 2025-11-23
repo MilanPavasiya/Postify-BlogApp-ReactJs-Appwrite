@@ -127,9 +127,9 @@ function PostForm({ post }) {
 	}
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className='space-y-8'>
-			<div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
-				<div className='lg:col-span-2 space-y-6'>
+		<form onSubmit={handleSubmit(onSubmit)} className='space-y-6 sm:space-y-8'>
+			<div className='grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8'>
+				<div className='lg:col-span-2 space-y-4 sm:space-y-6'>
 					<div>
 						<Input
 							label='Title'
@@ -175,9 +175,9 @@ function PostForm({ post }) {
 					</div>
 				</div>
 
-				<div className='lg:col-span-1 space-y-6'>
-					<div className='bg-gray-50 rounded-xl p-6 border border-gray-200'>
-						<h3 className='text-lg font-semibold text-gray-900 mb-6'>
+				<div className='lg:col-span-1 space-y-4 sm:space-y-6'>
+					<div className='bg-gray-50 rounded-xl p-4 sm:p-6 border border-gray-200'>
+						<h3 className='text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6'>
 							Post Settings
 						</h3>
 
@@ -209,7 +209,7 @@ function PostForm({ post }) {
 						</div>
 
 						{post && post.featuredImage && (
-							<div className='w-full mb-6'>
+							<div className='w-full mb-4 sm:mb-6'>
 								<label className='block mb-2 text-sm font-medium text-gray-700'>
 									Current Image
 								</label>
@@ -241,7 +241,7 @@ function PostForm({ post }) {
 									? 'bg-green-600 hover:bg-green-700'
 									: 'bg-blue-600 hover:bg-blue-700'
 							}
-							className='w-full'>
+							className='w-full text-sm sm:text-base'>
 							{post ? 'Update Post' : 'Publish Post'}
 						</Button>
 					</div>

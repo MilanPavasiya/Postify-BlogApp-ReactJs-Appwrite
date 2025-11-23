@@ -27,22 +27,46 @@ body {
 }
 
 .browser-css h1 {
-	font-size: 2.25rem;
-}
-
-.browser-css h2 {
 	font-size: 1.875rem;
 }
 
-.browser-css h3 {
+@media (min-width: 640px) {
+	.browser-css h1 {
+		font-size: 2.25rem;
+	}
+}
+
+.browser-css h2 {
 	font-size: 1.5rem;
+}
+
+@media (min-width: 640px) {
+	.browser-css h2 {
+		font-size: 1.875rem;
+	}
+}
+
+.browser-css h3 {
+	font-size: 1.25rem;
+}
+
+@media (min-width: 640px) {
+	.browser-css h3 {
+		font-size: 1.5rem;
+	}
 }
 
 .browser-css p {
 	margin-bottom: 1.5rem;
 	line-height: 1.75;
-	font-size: 1.125rem;
+	font-size: 1rem;
 	color: #374151;
+}
+
+@media (min-width: 640px) {
+	.browser-css p {
+		font-size: 1.125rem;
+	}
 }
 
 .browser-css img {

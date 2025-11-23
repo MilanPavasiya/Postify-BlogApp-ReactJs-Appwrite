@@ -44,41 +44,41 @@ function Features() {
 
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50'>
-			<div className='py-16 md:py-24'>
+			<div className='py-12 sm:py-16 md:py-24'>
 				<Container>
-					<div className='text-center mb-16 animate-fade-in'>
-						<h1 className='text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 animate-slide-up'>
+					<div className='text-center mb-12 sm:mb-16 animate-fade-in px-4 sm:px-0'>
+						<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up'>
 							Amazing Features
 						</h1>
-						<p className='text-xl text-gray-600 max-w-2xl mx-auto mb-4'>
+						<p className='text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-3 sm:mb-4'>
 							Everything you need to create, manage, and share your content with style. Postify offers a comprehensive set of tools designed to make content creation effortless and enjoyable.
 						</p>
-						<p className='text-lg text-gray-500 max-w-2xl mx-auto'>
+						<p className='text-sm sm:text-base md:text-lg text-gray-500 max-w-2xl mx-auto'>
 							From rich text editing to secure image storage, we've built every feature with your needs in mind.
 						</p>
 					</div>
 
-					<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12'>
+					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-12'>
 						{features.map((feature, index) => (
 							<div
 								key={index}
-								className='group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 animate-fade-in-up'
+								className='group bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 animate-fade-in-up'
 								style={{ animationDelay: `${index * 0.1}s` }}>
 								<div
-									className={`w-16 h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-3xl mb-6 transform group-hover:scale-110 transition-transform duration-300`}>
+									className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center text-2xl sm:text-3xl mb-4 sm:mb-6 transform group-hover:scale-110 transition-transform duration-300`}>
 									{feature.icon}
 								</div>
-								<h3 className='text-2xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors'>
+								<h3 className='text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4 group-hover:text-blue-600 transition-colors'>
 									{feature.title}
 								</h3>
-								<p className='text-gray-600 leading-relaxed'>{feature.description}</p>
+								<p className='text-sm sm:text-base text-gray-600 leading-relaxed'>{feature.description}</p>
 							</div>
 						))}
 					</div>
 
-					<div className='text-center'>
+					<div className='text-center px-4 sm:px-0'>
 						<Link to='/signup'>
-							<Button className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'>
+							<Button className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'>
 								Get Started Today
 							</Button>
 						</Link>

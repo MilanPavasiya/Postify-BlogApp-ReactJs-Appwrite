@@ -38,19 +38,19 @@ function Home() {
 
 	if (!authStatus) {
 		return (
-			<div className='w-full min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-16 md:py-24 relative overflow-hidden'>
-				<div className='absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full filter blur-3xl opacity-20 animate-pulse'></div>
+			<div className='w-full min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-12 sm:py-16 md:py-24 relative overflow-hidden'>
+				<div className='absolute top-0 left-0 w-64 h-64 sm:w-96 sm:h-96 bg-blue-400 rounded-full filter blur-3xl opacity-20 animate-pulse'></div>
 				<div
-					className='absolute bottom-0 right-0 w-96 h-96 bg-purple-400 rounded-full filter blur-3xl opacity-20 animate-pulse'
+					className='absolute bottom-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-purple-400 rounded-full filter blur-3xl opacity-20 animate-pulse'
 					style={{ animationDelay: '1s' }}></div>
 
 				<Container>
-					<div className='max-w-2xl mx-auto text-center relative z-10 animate-fade-in'>
-						<h1 className='text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 animate-slide-up'>
+					<div className='max-w-2xl mx-auto text-center relative z-10 animate-fade-in px-4 sm:px-0'>
+						<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up'>
 							Welcome to Postify
 						</h1>
 						<p
-							className='text-xl text-gray-600 mb-10 leading-relaxed animate-fade-in-up'
+							className='text-base sm:text-lg md:text-xl text-gray-600 mb-8 sm:mb-10 leading-relaxed animate-fade-in-up px-2'
 							style={{ animationDelay: '0.2s' }}>
 							Discover and share amazing stories. Login to see posts or create
 							your own.
@@ -59,7 +59,7 @@ function Home() {
 							className='animate-fade-in-up'
 							style={{ animationDelay: '0.4s' }}>
 							<Link to='/login'>
-								<Button className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-base px-8 py-4 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'>
+								<Button className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'>
 									Get Started
 								</Button>
 							</Link>
@@ -72,22 +72,22 @@ function Home() {
 
 	if (posts.length === 0) {
 		return (
-			<div className='w-full min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-16 md:py-24 relative overflow-hidden'>
-				<div className='absolute top-20 right-10 w-72 h-72 bg-purple-300 rounded-full filter blur-3xl opacity-20 animate-pulse'></div>
+			<div className='w-full min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 py-12 sm:py-16 md:py-24 relative overflow-hidden'>
+				<div className='absolute top-20 right-10 w-48 h-48 sm:w-72 sm:h-72 bg-purple-300 rounded-full filter blur-3xl opacity-20 animate-pulse'></div>
 				<div
-					className='absolute bottom-20 left-10 w-72 h-72 bg-blue-300 rounded-full filter blur-3xl opacity-20 animate-pulse'
+					className='absolute bottom-20 left-10 w-48 h-48 sm:w-72 sm:h-72 bg-blue-300 rounded-full filter blur-3xl opacity-20 animate-pulse'
 					style={{ animationDelay: '1.5s' }}></div>
 
 				<Container>
-					<div className='max-w-2xl mx-auto text-center relative z-10 animate-fade-in'>
-						<div className='mb-8 animate-bounce'>
-							<span className='text-8xl'>📝</span>
+					<div className='max-w-2xl mx-auto text-center relative z-10 animate-fade-in px-4 sm:px-0'>
+						<div className='mb-6 sm:mb-8 animate-bounce'>
+							<span className='text-6xl sm:text-8xl'>📝</span>
 						</div>
-						<h1 className='text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-6 animate-slide-up'>
+						<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up'>
 							No posts yet
 						</h1>
 						<p
-							className='text-xl text-gray-600 mb-10 leading-relaxed animate-fade-in-up'
+							className='text-base sm:text-lg md:text-xl text-gray-600 mb-8 sm:mb-10 leading-relaxed animate-fade-in-up px-2'
 							style={{ animationDelay: '0.2s' }}>
 							Be the first one to create a post and share your thoughts with the
 							community.
@@ -96,7 +96,7 @@ function Home() {
 							className='animate-fade-in-up'
 							style={{ animationDelay: '0.4s' }}>
 							<Link to='/add-post'>
-								<Button className='bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-base px-8 py-4 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'>
+								<Button className='bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-sm sm:text-base px-6 sm:px-8 py-3 sm:py-4 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'>
 									Create Your First Post
 								</Button>
 							</Link>
@@ -108,19 +108,19 @@ function Home() {
 	}
 
 	return (
-		<div className='w-full py-12 md:py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50'>
+		<div className='w-full py-8 sm:py-12 md:py-16 bg-gradient-to-br from-gray-50 via-white to-blue-50'>
 			<Container>
-				<div className='mb-12 text-center animate-fade-in'>
-					<h1 className='text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 animate-slide-up'>
+				<div className='mb-8 sm:mb-12 text-center animate-fade-in px-4 sm:px-0'>
+					<h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-3 sm:mb-4 animate-slide-up'>
 						Latest Posts
 					</h1>
 					<p
-						className='text-xl text-gray-600 animate-fade-in-up'
+						className='text-base sm:text-lg md:text-xl text-gray-600 animate-fade-in-up'
 						style={{ animationDelay: '0.2s' }}>
 						Discover stories from our community
 					</p>
 				</div>
-				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6'>
+				<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6'>
 					{posts.map((post, index) => (
 						<div
 							key={post.$id}

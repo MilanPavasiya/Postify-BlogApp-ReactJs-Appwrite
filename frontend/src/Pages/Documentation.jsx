@@ -494,35 +494,35 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 
 	return (
 		<div className='min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50'>
-			<div className='py-12 md:py-16'>
+			<div className='py-8 sm:py-12 md:py-16'>
 				<Container>
-					<div className='max-w-7xl mx-auto'>
+					<div className='max-w-7xl mx-auto px-4 sm:px-0'>
 						{/* Header */}
-						<div className='text-center mb-12 animate-fade-in'>
-							<h1 className='text-5xl md:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-6 animate-slide-up'>
+						<div className='text-center mb-8 sm:mb-12 animate-fade-in'>
+							<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up'>
 								Documentation
 							</h1>
-							<p className='text-xl text-gray-600 max-w-3xl mx-auto'>
+							<p className='text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto'>
 								Complete guide to Postify's features, integrations, and functionality
 							</p>
 						</div>
 
-						<div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
+						<div className='grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8'>
 							{/* Sidebar Navigation */}
 							<div className='lg:col-span-1'>
-								<div className='sticky top-24 bg-white rounded-xl shadow-lg border border-gray-200 p-6'>
-									<h2 className='text-lg font-bold text-gray-900 mb-4'>Table of Contents</h2>
-									<nav className='space-y-2'>
+								<div className='sticky top-20 lg:top-24 bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6'>
+									<h2 className='text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4'>Table of Contents</h2>
+									<nav className='space-y-1 sm:space-y-2'>
 										{sections.map((section) => (
 											<button
 												key={section.id}
 												onClick={() => setActiveSection(section.id)}
-												className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-200 flex items-center gap-3 ${
+												className={`w-full text-left px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-all duration-200 flex items-center gap-2 sm:gap-3 text-sm sm:text-base ${
 													activeSection === section.id
 														? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg transform scale-105'
 														: 'text-gray-700 hover:bg-gray-100 hover:translate-x-1'
 												}`}>
-												<span className='text-xl'>{section.icon}</span>
+												<span className='text-lg sm:text-xl'>{section.icon}</span>
 												<span className='font-medium'>{section.title}</span>
 											</button>
 										))}
@@ -539,19 +539,19 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 						</div>
 
 						{/* Quick Links */}
-						<div className='mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center animate-fade-in'>
-							<h2 className='text-2xl font-bold mb-4'>Ready to Get Started?</h2>
-							<p className='mb-6 opacity-90'>
+						<div className='mt-8 sm:mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white text-center animate-fade-in'>
+							<h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>Ready to Get Started?</h2>
+							<p className='text-sm sm:text-base mb-4 sm:mb-6 opacity-90'>
 								Start creating amazing content with Postify today!
 							</p>
-							<div className='flex gap-4 justify-center'>
+							<div className='flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center'>
 								<Link to='/signup'>
-									<Button className='bg-white text-blue-600 hover:bg-gray-100'>
+									<Button className='bg-white text-blue-600 hover:bg-gray-100 w-full sm:w-auto'>
 										Sign Up Free
 									</Button>
 								</Link>
 								<Link to='/contact'>
-									<Button className='bg-purple-700 hover:bg-purple-800 text-white border-2 border-white'>
+									<Button className='bg-purple-700 hover:bg-purple-800 text-white border-2 border-white w-full sm:w-auto'>
 										Contact Support
 									</Button>
 								</Link>
@@ -565,4 +565,5 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 }
 
 export default Documentation;
+
 

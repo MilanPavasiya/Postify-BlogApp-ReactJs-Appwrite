@@ -30,27 +30,27 @@ function Signup() {
 	};
 
 	return (
-		<div className='flex items-center justify-center w-full min-h-[calc(100vh-200px)] py-12'>
+		<div className='flex items-center justify-center w-full min-h-[calc(100vh-200px)] py-8 sm:py-12 px-4'>
 			<div className='mx-auto w-full max-w-md'>
-				<div className='bg-white rounded-2xl shadow-lg border border-gray-200 p-8 md:p-10'>
-					<div className='mb-6 flex justify-center'>
-						<span className='inline-block w-full max-w-[120px]'>
+				<div className='bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-200 p-6 sm:p-8 md:p-10'>
+					<div className='mb-4 sm:mb-6 flex justify-center'>
+						<span className='inline-block w-full max-w-[100px] sm:max-w-[120px]'>
 							<Logo width='100%' />
 						</span>
 					</div>
-					<h2 className='text-center text-3xl font-bold text-gray-900 mb-2'>
+					<h2 className='text-center text-2xl sm:text-3xl font-bold text-gray-900 mb-2'>
 						Create your account
 					</h2>
-					<p className='text-center text-gray-600 mb-8'>
+					<p className='text-center text-sm sm:text-base text-gray-600 mb-6 sm:mb-8'>
 						Join Postify and start sharing your stories
 					</p>
 					{error && (
-						<div className='mb-6 p-4 bg-red-50 border border-red-200 rounded-lg'>
-							<p className='text-sm text-red-600 text-center'>{error}</p>
+						<div className='mb-4 sm:mb-6 p-3 sm:p-4 bg-red-50 border border-red-200 rounded-lg'>
+							<p className='text-xs sm:text-sm text-red-600 text-center'>{error}</p>
 						</div>
 					)}
 
-					<form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+					<form onSubmit={handleSubmit(onSubmit)} className='space-y-4 sm:space-y-6'>
 						<Input
 							label='Full Name'
 							placeholder='Enter your full name'
@@ -78,11 +78,11 @@ function Signup() {
 							})}
 						/>
 
-						<Button type='submit' className='w-full mt-8'>
+						<Button type='submit' className='w-full mt-6 sm:mt-8'>
 							Create Account
 						</Button>
 					</form>
-					<p className='mt-6 text-center text-sm text-gray-600'>
+					<p className='mt-4 sm:mt-6 text-center text-xs sm:text-sm text-gray-600'>
 						Already have an account?&nbsp;
 						<Link
 							to='/login'
