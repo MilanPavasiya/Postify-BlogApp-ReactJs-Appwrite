@@ -11,7 +11,7 @@ function LogoutBtn() {
 	};
 	return (
 		<button
-			className='px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 rounded-lg transition-all duration-200 hover:bg-gray-100 hover:text-gray-900'
+			className='px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium text-gray-700 rounded-lg transition-all duration-200 hover:bg-red-500 hover:text-white'
 			onClick={logoutHandler}>
 			Logout
 		</button>
