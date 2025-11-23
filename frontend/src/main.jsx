@@ -22,6 +22,7 @@ import {
 	Features,
 	Pricing,
 	Help,
+	FAQ,
 	Contact,
 	Documentation,
 } from './Pages';
@@ -74,6 +75,7 @@ const router = createBrowserRouter(
 			<Route path='/features' element={<Features />} />
 			<Route path='/pricing' element={<Pricing />} />
 			<Route path='/help' element={<Help />} />
+			<Route path='/faq' element={<FAQ />} />
 			<Route path='/contact' element={<Contact />} />
 			<Route path='/docs' element={<Documentation />} />
 			<Route path='/documentation' element={<Documentation />} />

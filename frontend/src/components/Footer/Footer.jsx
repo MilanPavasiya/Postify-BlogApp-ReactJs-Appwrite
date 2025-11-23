@@ -18,7 +18,7 @@ function Footer() {
 				<div className='grid grid-cols-1 gap-8 sm:gap-10 md:gap-12 md:grid-cols-2 lg:grid-cols-4'>
 					<div className='lg:col-span-2'>
 						<div className='mb-4 sm:mb-6 transform hover:scale-105 transition-transform duration-300'>
-							<Logo width='100px' className='sm:w-[120px]' />
+							<Logo width='100px' className='sm:w-[120px]' textColor='white' />
 						</div>
 						<p className='text-sm sm:text-base text-gray-300 mb-4 sm:mb-6 leading-relaxed max-w-md'>
 							Create, share, and manage your content with Postify. The modern
@@ -98,7 +98,7 @@ function Footer() {
 							<li>
 								<Link
 									className='text-sm sm:text-base text-gray-300 hover:text-white transition-all duration-200 hover:translate-x-1 inline-block transform group'
-									to='/'>
+									to='/faq'>
 									<span className='group-hover:text-blue-300'>FAQ</span>
 								</Link>
 							</li>
