@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Logo({ size = 180, width, className = '' }) {
+function Logo({ size = 180, width, className = '', textColor = '#0E1A30' }) {
 	let logoWidth = size;
 	let logoHeight = (logoWidth / 3.5) * 1;
 	
@@ -68,7 +68,7 @@ function Logo({ size = 180, width, className = '' }) {
 							fontFamily='Arial, Helvetica, sans-serif'
 							fontSize='64'
 							fontWeight='600'
-							fill='#0E1A30'>
+							fill={textColor}>
 							Postify
 						</text>
 					</svg>
@@ -137,7 +137,7 @@ function Logo({ size = 180, width, className = '' }) {
 				fontFamily='Arial, Helvetica, sans-serif'
 				fontSize='64'
 				fontWeight='600'
-				fill='#0E1A30'>
+				fill={textColor}>
 				Postify
 			</text>
 		</svg>

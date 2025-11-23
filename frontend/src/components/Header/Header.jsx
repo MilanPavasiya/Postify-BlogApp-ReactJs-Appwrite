@@ -54,7 +54,7 @@ function Header() {
 						<Link
 							to='/'
 							className='transition-all duration-300 hover:scale-105 transform inline-block'>
-							<Logo width='60px' className='md:w-[70px]' />
+							<Logo width='80px' className='md:w-[90px]' />
 						</Link>
 					</div>
 					<ul className='hidden md:flex items-center gap-2'>
