@@ -18,7 +18,7 @@ function Home() {
 		}
 
 		const fetchPosts = async () => {
-			const response = await appwriteService.getAllPosts(userData.$id);
+			const response = await appwriteService.getAllPosts(userData.$id, 'active');
 			setPosts(response ? response.documents : []);
 			setLoading(false);
 		};

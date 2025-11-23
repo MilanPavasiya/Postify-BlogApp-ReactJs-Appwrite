@@ -101,11 +101,14 @@ export class AppwriteService {
 		}
 	}
 
-	async getAllPosts(userId) {
+	async getAllPosts(userId, status = null) {
 		try {
-			const queries = [Query.equal('status', ['active'])];
+			const queries = [];
 			if (userId) {
 				queries.push(Query.equal('userId', [userId]));
+			}
+			if (status) {
+				queries.push(Query.equal('status', [status]));
 			}
 
 			return await this.databases.listDocuments(
