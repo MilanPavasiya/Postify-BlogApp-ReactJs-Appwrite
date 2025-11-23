@@ -46,7 +46,6 @@ export default function Post() {
 		<article className='py-6 sm:py-8 md:py-12'>
 			<Container>
 				<div className='max-w-4xl mx-auto px-4 sm:px-0'>
-					{/* Featured Image */}
 					<div className='w-full mb-6 sm:mb-8 relative rounded-xl sm:rounded-2xl overflow-hidden bg-gray-100'>
 						<img
 							src={post.featuredImage}
@@ -67,14 +66,12 @@ export default function Post() {
 						)}
 					</div>
 
-					{/* Title */}
 					<header className='mb-6 sm:mb-8'>
 						<h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-3 sm:mb-4'>
 							{post.title}
 						</h1>
 					</header>
 
-					{/* Content */}
 					<div className='prose prose-sm sm:prose-base md:prose-lg max-w-none browser-css'>
 						{parse(post.content)}
 					</div>

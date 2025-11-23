@@ -26,7 +26,6 @@ function Home() {
 		fetchPosts();
 	}, [authStatus, userData]);
 
-	// Loader
 	if (loading) {
 		return (
 			<div className='w-full py-20 text-center'>

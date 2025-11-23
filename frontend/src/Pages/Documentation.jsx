@@ -497,7 +497,6 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 			<div className='py-8 sm:py-12 md:py-16'>
 				<Container>
 					<div className='max-w-7xl mx-auto px-4 sm:px-0'>
-						{/* Header */}
 						<div className='text-center mb-8 sm:mb-12 animate-fade-in'>
 							<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up'>
 								Documentation
@@ -508,7 +507,6 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 						</div>
 
 						<div className='grid grid-cols-1 lg:grid-cols-4 gap-6 sm:gap-8'>
-							{/* Sidebar Navigation */}
 							<div className='lg:col-span-1'>
 								<div className='sticky top-20 lg:top-24 bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6'>
 									<h2 className='text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4'>Table of Contents</h2>
@@ -530,7 +528,6 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 								</div>
 							</div>
 
-							{/* Main Content */}
 							<div className='lg:col-span-3'>
 								<div className='animate-fade-in-up'>
 									{content[activeSection]}
@@ -538,7 +535,6 @@ VITE_API_BASE_URL=your_backend_api_url`}</pre>
 							</div>
 						</div>
 
-						{/* Quick Links */}
 						<div className='mt-8 sm:mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl sm:rounded-2xl p-6 sm:p-8 text-white text-center animate-fade-in'>
 							<h2 className='text-xl sm:text-2xl font-bold mb-3 sm:mb-4'>Ready to Get Started?</h2>
 							<p className='text-sm sm:text-base mb-4 sm:mb-6 opacity-90'>

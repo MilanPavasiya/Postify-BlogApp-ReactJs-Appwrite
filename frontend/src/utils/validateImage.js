@@ -1,5 +1,4 @@
-// File validation constants
-const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB in bytes
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 const ALLOWED_EXTENSIONS = ['.png', '.jpg', '.jpeg', '.gif'];
 
@@ -13,7 +12,6 @@ export const validateImage = (file) => {
 		return { isValid: false, error: 'No file selected' };
 	}
 
-	// Check file size
 	if (file.size > MAX_FILE_SIZE) {
 		const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
 		return {
@@ -22,7 +20,6 @@ export const validateImage = (file) => {
 		};
 	}
 
-	// Check file type
 	if (!ALLOWED_TYPES.includes(file.type)) {
 		return {
 			isValid: false,
@@ -30,7 +27,6 @@ export const validateImage = (file) => {
 		};
 	}
 
-	// Double-check by file extension (in case MIME type is missing)
 	const fileName = file.name.toLowerCase();
 	const hasValidExtension = ALLOWED_EXTENSIONS.some((ext) =>
 		fileName.endsWith(ext)

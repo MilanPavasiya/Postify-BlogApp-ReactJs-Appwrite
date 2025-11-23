@@ -119,8 +119,6 @@ export class AppwriteService {
 		}
 	}
 
-	// Appwrite File upload services
-
 	async uploadFile(file) {
 		try {
 			const validation = validateImage(file);

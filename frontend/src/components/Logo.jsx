@@ -1,7 +1,6 @@
 import React from 'react';
 
 function Logo({ size = 180, width, className = '' }) {
-	// Handle width prop - can be number, string with px, or percentage
 	let logoWidth = size;
 	let logoHeight = (logoWidth / 3.5) * 1;
 	
@@ -10,7 +9,6 @@ function Logo({ size = 180, width, className = '' }) {
 			logoWidth = width;
 			logoHeight = (logoWidth / 3.5) * 1;
 		} else if (typeof width === 'string') {
-			// If it's a percentage or contains 'px', use it as style
 			if (width.includes('%') || width.includes('px')) {
 				return (
 					<svg

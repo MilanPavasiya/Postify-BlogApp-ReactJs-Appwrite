@@ -17,7 +17,6 @@ function RTE({ name, control, label, defaultValue = '', key }) {
 					control={control}
 					defaultValue={defaultValue}
 					render={({ field: { onChange, value } }) => {
-						// Use value from form state, fallback to empty string if undefined/null
 						const editorValue = value !== undefined && value !== null ? value : '';
 						
 						return (

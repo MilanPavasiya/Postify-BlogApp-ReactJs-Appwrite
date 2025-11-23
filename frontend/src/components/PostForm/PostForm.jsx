@@ -29,7 +29,6 @@ function PostForm({ post }) {
 	const navigate = useNavigate();
 	const userData = useSelector((state) => state.auth.userData);
 
-	// Transform title to slug
 	const slugTransform = useCallback((value) => {
 		if (value && typeof value === 'string')
 			return value
@@ -40,7 +39,6 @@ function PostForm({ post }) {
 		return '';
 	}, []);
 
-	// Reset form values when userData or post changes
 	useEffect(() => {
 		if (userData) {
 			reset({
@@ -51,11 +49,10 @@ function PostForm({ post }) {
 			}, {
 				keepDefaultValues: false,
 			});
-			setValue('image', null); // clear previous image for new user
+			setValue('image', null);
 		}
 	}, [userData, post, reset, slugTransform, setValue]);
 
-	// Update slug dynamically as title changes
 	useEffect(() => {
 		const subscription = watch((value, { name }) => {
 			if (name === 'title') {
@@ -73,7 +70,6 @@ function PostForm({ post }) {
 
 		let imageUrl = null;
 
-		// Upload image to S3 if provided (validation already handled by form validation)
 		if (data.image && data.image[0]) {
 			imageUrl = await uploadToS3(data.image[0]);
 
@@ -84,7 +80,6 @@ function PostForm({ post }) {
 		}
 
 		if (post) {
-			// Update existing post
 			const updatedPost = await appwriteService.updatePost(
 				post.$id,
 				{
@@ -97,7 +92,6 @@ function PostForm({ post }) {
 			);
 			if (updatedPost) navigate(`/post/${updatedPost.$id}`);
 		} else {
-			// Create new post
 			if (!imageUrl) {
 				alert('Please upload a featured image.');
 				return;
@@ -114,7 +108,6 @@ function PostForm({ post }) {
 		}
 	};
 
-	// Block render until userData is loaded
 	if (!userData) {
 		return (
 			<div className='flex items-center justify-center py-12'>

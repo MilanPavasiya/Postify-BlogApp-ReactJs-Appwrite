@@ -57,7 +57,6 @@ function Header() {
 							<Logo width='60px' className='md:w-[70px]' />
 						</Link>
 					</div>
-					{/* Desktop Navigation */}
 					<ul className='hidden md:flex items-center gap-2'>
 						{navItems.map((item) =>
 							item.active ? (
@@ -78,7 +77,6 @@ function Header() {
 						)}
 					</ul>
 
-					{/* Mobile Menu Button */}
 					<button
 						onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
 						className='md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors'
@@ -109,7 +107,6 @@ function Header() {
 					</button>
 				</nav>
 
-				{/* Mobile Navigation Menu */}
 				{mobileMenuOpen && (
 					<div className='md:hidden border-t border-gray-200 py-4 animate-fade-in'>
 						<ul className='flex flex-col gap-2'>
