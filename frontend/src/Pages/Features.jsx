@@ -46,8 +46,8 @@ function Features() {
 		<div className='min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50'>
 			<div className='py-12 sm:py-16 md:py-24'>
 				<Container>
-					<div className='text-center mb-12 sm:mb-16 animate-fade-in px-4 sm:px-0'>
-						<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up'>
+					<div className='text-center mb-12 sm:mb-16 animate-fade-in px-4 sm:px-0 overflow-visible'>
+						<h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-4 sm:mb-6 animate-slide-up leading-normal overflow-visible pb-1'>
 							Amazing Features
 						</h1>
 						<p className='text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-3 sm:mb-4'>
