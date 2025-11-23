@@ -23,6 +23,12 @@ function Features() {
 			color: 'from-green-500 to-emerald-500',
 		},
 		{
+			icon: '🎯',
+			title: 'Smart Navigation',
+			description: 'Desktop sidebar navigation with intuitive icons and active route highlighting. Mobile-friendly header menu for smaller screens.',
+			color: 'from-indigo-500 to-purple-500',
+		},
+		{
 			icon: '⚡',
 			title: 'Fast & Responsive',
 			description: 'Built with modern technologies for lightning-fast performance across all devices.',
@@ -31,13 +37,13 @@ function Features() {
 		{
 			icon: '🎨',
 			title: 'Beautiful Design',
-			description: 'Enjoy a stunning, modern interface that makes creating and reading posts a pleasure.',
-			color: 'from-indigo-500 to-purple-500',
+			description: 'Enjoy a stunning, modern interface with gradient effects, smooth animations, and polished UI components.',
+			color: 'from-pink-500 to-rose-500',
 		},
 		{
 			icon: '📱',
 			title: 'Mobile Friendly',
-			description: 'Fully responsive design that works perfectly on desktop, tablet, and mobile devices.',
+			description: 'Fully responsive design that works perfectly on desktop, tablet, and mobile devices with adaptive navigation.',
 			color: 'from-teal-500 to-blue-500',
 		},
 	];

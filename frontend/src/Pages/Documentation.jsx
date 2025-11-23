@@ -110,6 +110,21 @@ function Documentation() {
 								<li>Optimized image loading</li>
 							</ul>
 						</div>
+
+						<div className='p-6 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg'>
+							<h3 className='text-xl font-bold text-gray-900 mb-3'>🎯 Navigation System</h3>
+							<p className='text-gray-700 mb-4'>
+								Intuitive navigation designed for optimal user experience:
+							</p>
+							<ul className='list-disc list-inside space-y-2 text-gray-600'>
+								<li><strong>Desktop Sidebar:</strong> Fixed left sidebar navigation on desktop (lg screens and up) with icon-based menu items</li>
+								<li><strong>Mobile Header:</strong> Responsive top header navigation for mobile and tablet devices</li>
+								<li><strong>Active Route Highlighting:</strong> Visual indication of current page with gradient background</li>
+								<li><strong>Authentication-Aware:</strong> Navigation items dynamically show/hide based on user login status</li>
+								<li><strong>Smooth Transitions:</strong> Hover effects and smooth transitions for better interactivity</li>
+								<li><strong>Quick Access:</strong> Easy access to all major sections including Home, Posts, Documentation, Features, Pricing, and Contact</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -189,7 +204,7 @@ function Documentation() {
 								To create a new post, users must:
 							</p>
 							<ol className='list-decimal list-inside space-y-2 text-gray-600'>
-								<li>Navigate to "Add Post" from the navigation menu</li>
+								<li>Navigate to "Add Post" from the sidebar navigation (desktop) or header menu (mobile)</li>
 								<li>Enter a descriptive title (required)</li>
 								<li>Upload a featured image (PNG, JPG, JPEG, or GIF, max 1MB)</li>
 								<li>Write content using the rich text editor</li>
@@ -349,6 +364,7 @@ function Documentation() {
 								<li><strong>Responsive Design:</strong> Built-in responsive breakpoints</li>
 								<li><strong>Custom Animations:</strong> Custom keyframe animations and transitions</li>
 								<li><strong>Gradient Support:</strong> Beautiful gradient backgrounds and text</li>
+								<li><strong>Modern UI Components:</strong> Sidebar navigation, responsive headers, and polished interface elements</li>
 							</ul>
 						</div>
 					</div>
