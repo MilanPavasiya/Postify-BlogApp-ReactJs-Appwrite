@@ -8,7 +8,8 @@ import Signup from './Signup';
 import Features from './Features';
 import Pricing from './Pricing';
 import Help from './Help';
+import FAQ from './FAQ';
 import Contact from './Contact';
 import Documentation from './Documentation';
 
-export { AddPost, AllPosts, EditPost, Home, Login, Post, Signup, Features, Pricing, Help, Contact, Documentation };
+export { AddPost, AllPosts, EditPost, Home, Login, Post, Signup, Features, Pricing, Help, FAQ, Contact, Documentation };
