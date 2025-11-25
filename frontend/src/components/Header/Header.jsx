@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Container, Logo, LogoutBtn } from '../index';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import authService from '../../appwrite/auth';
+import { logout } from '../../store/authSlice';
 
 function Header() {
 	const authStatus = useSelector((state) => state.auth.status);
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
 	const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
 	const navItems = [
@@ -46,15 +49,20 @@ function Header() {
 		setMobileMenuOpen(false);
 	};
 
+	const logoutHandler = () => {
+		authService.logout().then(() => dispatch(logout()));
+		setMobileMenuOpen(false);
+	};
+
 	return (
-		<header className='lg:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg'>
+		<header className='md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg'>
 			<Container>
 				<nav className='flex items-center justify-between py-3 md:py-4'>
 					<div className='flex items-center'>
 						<Link
 							to='/'
 							className='transition-all duration-300 hover:scale-105 transform inline-block'>
-							<Logo width='80px' className='md:w-[90px]' />
+							<Logo width='100px' className='sm:w-[120px]' />
 						</Link>
 					</div>
 					<ul className='hidden md:flex items-center gap-2'>
@@ -123,7 +131,11 @@ function Header() {
 							)}
 							{authStatus && (
 								<li className='px-4 py-2'>
-									<LogoutBtn />
+									<button
+										onClick={logoutHandler}
+										className='w-full text-left px-4 py-3 text-base font-medium text-white bg-red-500 rounded-lg transition-all duration-300 hover:bg-red-600'>
+										Logout
+									</button>
 								</li>
 							)}
 						</ul>
